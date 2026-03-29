@@ -1,0 +1,253 @@
+<!-- 
+<h2>Create Resident Account</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Create Account</button>
+</form>
+
+<p>Already have an account?</p>
+<a href="/login/">Login here</a> -->
+
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html>
+<head>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <title>Register - Dipaleseng Portal</title>
+</head>
+<body>
+<h2>Create Resident Account</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Account</button>
+</form>
+
+<p>Already have an account? <a href="/login/">Login here</a></p>
+</body>
+</html> -->
+
+
+
+
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <img src="{% static 'reports/logo.png' %}" alt="Dipaleseng Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+    </div>
+</nav>
+
+<main class="auth-page">
+    <div class="auth-card">
+        <div class="auth-card-header">
+            <div class="auth-icon">&#9670;</div>
+            <h2>Create Account</h2>
+            <p>Register as a resident to report and track issues</p>
+        </div>
+
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="btn-primary">Create Account</button>
+        </form>
+
+        <div class="auth-footer">
+            <p>Already have an account? <a href="/login/">Login here</a></p>
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+</body>
+</html> -->
+
+
+
+<!-- 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – Dipaleseng Portal</title>
+{% load static %}
+<link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/login/" class="nav-login-btn">Login</a>
+    </div>
+</nav>
+
+<main class="main-content">
+     <div class="container">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <span class="auth-icon">&#9670;</span>
+                <h2>Create Account</h2>
+                <p>Register as a resident to report and track issues</p>
+            </div>
+
+            <form method="post" action="/register/">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" id="id_username" name="username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    <input type="password" id="id_password1" name="password1" required>
+                    <span class="field-help">At least 8 characters. Cannot be entirely numeric.</span>
+                </div>
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    <input type="password" id="id_password2" name="password2" required>
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+
+            <div class="container">
+                <p>Already have an account? <a href="/login/">Login here</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+  <div class="container">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+</body>
+</html> -->
+
+
+
+
+
+<!-- WORKING VERSION: -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/login/" class="nav-login-btn">Login</a>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="auth-page">
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+                <span class="auth-icon">&#9670;</span>
+                <h2>Create Account</h2>
+                <p>Register as a resident to report and track issues</p>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" action="/register/">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" id="id_username" name="username"
+                           value="{{ request.POST.username }}" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password1">Password</label>
+                    <input type="password" id="id_password1" name="password1" required>
+                    <span class="field-help">At least 8 characters. Cannot be entirely numeric.</span>
+                </div>
+                <div class="form-group">
+                    <label for="id_password2">Confirm Password</label>
+                    <input type="password" id="id_password2" name="password2" required>
+                </div>
+                <button type="submit" class="btn-primary">Create Account</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Already have an account? <a href="/login/">Login here</a></p>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+</body>
+</html>

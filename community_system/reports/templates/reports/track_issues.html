@@ -1,0 +1,713 @@
+<!-- <!DOCTYPE html>
+<html>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'reports/style.css' %}">
+<head>
+    <title>My Reports</title>
+</head>
+<body>
+
+
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+
+<div class="container">
+    <h2>My Reports</h2>
+
+    <p><strong>Pothole - Main Street</strong></p>
+    <p class="status-progress">Status: In Progress</p>
+
+    <p><strong>Water Leak - Zone 3</strong></p>
+    <p class="status-resolved">Status: Resolved</p>
+
+    <p><strong>Electricity Fault</strong></p>
+    <p class="status-pending">Status: Pending</p>
+
+
+    <h2>Track Your Issues</h2>
+
+<table border="1">
+
+<tr>
+<th>Description</th>
+<th>Location</th>
+<th>Status</th>
+</tr>
+
+{% for issue in issues %}
+
+<tr>
+<td>{{ issue.description }}</td>
+<td>{{ issue.location }}</td>
+<td>{{ issue.status }}</td>
+</tr>
+
+{% endfor %}
+
+</table>
+
+    <a href="/report/">Report New Issue</a>
+  
+</div>
+</body>
+</html> -->
+
+
+<!-- 2 -->
+
+<!-- <!DOCTYPE html>
+<html>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'reports/style.css' %}">
+<head>
+    <title>My Reports</title>
+    <style>
+        .reports-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 14px;
+        }
+
+        .reports-table th {
+            background: #1976d2;
+            color: #ffffff;
+            padding: 10px 12px;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .reports-table td {
+            padding: 10px 12px;
+            border-bottom: 1px solid #e0e0e0;
+            vertical-align: top;
+        }
+
+        .reports-table tr:nth-child(even) td {
+            background: #f5f8ff;
+        }
+
+        .reports-table tr:hover td {
+            background: #e3f0ff;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .status-pending   { background: #fff3e0; color: #e65100; }
+        .status-progress  { background: #e3f2fd; color: #1565c0; }
+        .status-resolved  { background: #e8f5e9; color: #2e7d32; }
+
+        .photo-thumb {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .no-photo {
+            color: #aaa;
+            font-style: italic;
+            font-size: 12px;
+        }
+
+        .location-cell a {
+            color: #1976d2;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .location-cell a:hover {
+            text-decoration: underline;
+        }
+
+        .coords {
+            display: block;
+            font-size: 11px;
+            color: #888;
+            margin-top: 2px;
+        }
+
+        .no-reports {
+            text-align: center;
+            color: #999;
+            padding: 30px;
+            font-style: italic;
+        }
+
+        .issue-type-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: #e8eaf6;
+            color: #3949ab;
+            font-size: 12px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+
+<div class="container">
+    <h2>My Reports</h2>
+
+    {% if issues %}
+    <table class="reports-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Issue Type</th>
+                <th>Description</th>
+                <th>Location</th>
+                <th>Photo</th>
+                <th>Status</th>
+                <th>Date Submitted</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for issue in issues %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+
+                <td>
+                    <span class="issue-type-badge">{{ issue.issue_type }}</span>
+                </td>
+
+                <td>{{ issue.description }}</td>
+
+                <td class="location-cell">
+                    {% if issue.address %}
+                        {{ issue.address }}
+                    {% endif %}
+                    {% if issue.latitude and issue.longitude %}
+                        <a href="https://www.openstreetmap.org/?mlat={{ issue.latitude }}&mlon={{ issue.longitude }}&zoom=16" target="_blank">
+                            📍 View on Map
+                        </a>
+                        <span class="coords">{{ issue.latitude }}, {{ issue.longitude }}</span>
+                    {% endif %}
+                    {% if not issue.address and not issue.latitude %}
+                        <span style="color:#aaa; font-style:italic;">Not provided</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if issue.photo %}
+                        <a href="{{ issue.photo.url }}" target="_blank">
+                            <img src="{{ issue.photo.url }}" alt="Issue photo" class="photo-thumb">
+                        </a>
+                    {% else %}
+                        <span class="no-photo">No photo</span>
+                    {% endif %}
+                </td>
+
+                <td>
+                    {% if issue.status == "Resolved" %}
+                        <span class="status-badge status-resolved">Resolved</span>
+                    {% elif issue.status == "In Progress" %}
+                        <span class="status-badge status-progress">In Progress</span>
+                    {% else %}
+                        <span class="status-badge status-pending">Pending</span>
+                    {% endif %}
+                </td>
+
+                <td>{{ issue.created_at|date:"d M Y" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}
+        <p class="no-reports">You have not submitted any reports yet.</p>
+    {% endif %}
+
+    <br>
+    <a href="/report/">+ Report New Issue</a>
+</div>
+
+</body>
+</html> -->
+
+<!-- 
+<!DOCTYPE html>
+<html>
+{% load static %}
+<head>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <title>My Reports</title>
+    <style>
+        .reports-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 16px;
+        }
+
+        .report-card {
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+
+        .report-card-header {
+            background: #1976d2;
+            color: #fff;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .report-card-header .issue-type {
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .report-card-header .submitted-time {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+
+        .report-card-body {
+            display: flex;
+            gap: 0;
+        }
+
+        .report-photo {
+            width: 160px;
+            min-height: 140px;
+            flex-shrink: 0;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .report-photo img {
+            width: 160px;
+            height: 100%;
+            min-height: 140px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .report-photo .no-photo {
+            color: #bbb;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
+        }
+
+        .report-details {
+            padding: 14px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 8px;
+            font-size: 14px;
+            align-items: flex-start;
+        }
+
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            color: #222;
+        }
+
+        .detail-value a {
+            color: #1976d2;
+            text-decoration: none;
+        }
+
+        .detail-value a:hover {
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+
+        .status-Pending     { background: #fff3e0; color: #e65100; }
+        .status-InProgress  { background: #e3f2fd; color: #1565c0; }
+        .status-Resolved    { background: #e8f5e9; color: #2e7d32; }
+
+        .no-reports {
+            text-align: center;
+            color: #999;
+            padding: 40px 0;
+            font-style: italic;
+        }
+
+        @media (max-width: 520px) {
+            .report-card-body { flex-direction: column; }
+            .report-photo { width: 100%; min-height: 180px; }
+            .report-photo img { width: 100%; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+
+<div class="container">
+    <h2>My Reports</h2>
+
+    {% if issues %}
+        <div class="reports-grid">
+            {% for issue in issues %}
+            <div class="report-card">
+
+                <div class="report-card-header">
+                    <span class="issue-type">{{ issue.issue_type }}</span>
+                    <span class="submitted-time">🕐 {{ issue.created_at|date:"d M Y, H:i" }}</span>
+                </div>
+
+                <div class="report-card-body">
+
+                    Photo -->
+                    <!-- <div class="report-photo">
+                        {% if issue.photo %}
+                            <a href="{{ issue.photo.url }}" target="_blank">
+                                <img src="{{ issue.photo.url }}" alt="Issue photo">
+                            </a>
+                        {% else %}
+                            <span class="no-photo">📷<br>No photo submitted</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details -->
+                    <!-- <div class="report-details">
+
+                        <div class="detail-row">
+                            <span class="detail-label">Description:</span>
+                            <span class="detail-value">{{ issue.description }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Location:</span>
+                            <span class="detail-value">
+                                {% if issue.address %}
+                                    {{ issue.address }}<br>
+                                {% endif %}
+                                {% if issue.latitude and issue.longitude %}
+                                    <a href="https://www.openstreetmap.org/?mlat={{ issue.latitude }}&mlon={{ issue.longitude }}&zoom=16" target="_blank">
+                                        📍 View on Map
+                                    </a>
+                                {% endif %}
+                                {% if not issue.address and not issue.latitude %}
+                                    <span style="color:#aaa; font-style:italic;">Not provided</span>
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Status:</span>
+                            <span class="detail-value">
+                                {% if issue.status == "In Progress" %}
+                                    <span class="status-badge status-InProgress">In Progress</span>
+                                {% elif issue.status == "Resolved" %}
+                                    <span class="status-badge status-Resolved">Resolved</span>
+                                {% else %}
+                                    <span class="status-badge status-Pending">Pending</span>
+                                {% endif %}
+                            </span>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div> -->
+            <!-- {% endfor %}
+        </div>
+
+    {% else %}
+        <p class="no-reports">No reports submitted yet.</p>
+    {% endif %}
+
+    <br>
+    <a href="/report/">+ Report New Issue</a>
+    <a href="/accounts/logout/">Logout</a>
+</div>
+
+</body>
+</html> -->
+
+
+
+<!-- WORKING VERSION:  -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Reports – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .reports-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin-top: 16px;
+        }
+        .report-card {
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--surface);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+        }
+        .report-card-header {
+            background: var(--navy);
+            color: #fff;
+            padding: 10px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 2px solid var(--gold);
+        }
+        .report-card-header .issue-type {
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .report-card-header .submitted-time {
+            font-size: 12px;
+            opacity: 0.85;
+        }
+        .report-card-body {
+            display: flex;
+            gap: 0;
+        }
+        .report-photo {
+            width: 160px;
+            min-height: 140px;
+            flex-shrink: 0;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .report-photo img {
+            width: 160px;
+            height: 100%;
+            min-height: 140px;
+            object-fit: cover;
+            display: block;
+        }
+        .report-photo .no-photo {
+            color: #bbb;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
+        }
+        .report-details {
+            padding: 14px 16px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .detail-row {
+            display: flex;
+            gap: 8px;
+            font-size: 14px;
+            align-items: flex-start;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: var(--muted);
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+        .detail-value { color: var(--text); }
+        .detail-value a { color: var(--navy); text-decoration: none; }
+        .detail-value a:hover { text-decoration: underline; }
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.4px;
+        }
+        .status-Pending    { background: #fff3e0; color: #e65100; }
+        .status-InProgress { background: #e3f2fd; color: #1565c0; }
+        .status-Resolved   { background: #e8f5e9; color: #2e7d32; }
+        .no-reports {
+            text-align: center;
+            color: var(--muted);
+            padding: 40px 0;
+            font-style: italic;
+        }
+        .track-actions {
+            margin-top: 20px;
+            display: flex;
+            gap: 12px;
+        }
+        @media (max-width: 520px) {
+            .report-card-body { flex-direction: column; }
+            .report-photo { width: 100%; min-height: 180px; }
+            .report-photo img { width: 100%; height: 180px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/staff/">Staff Dashboard</a>
+        <form action="/accounts/logout/" method="post" class="logout-form">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="page-container">
+        <div class="page-title">
+            <h2>My Reports</h2>
+        </div>
+
+        {% if issues %}
+            <div class="reports-grid">
+                {% for issue in issues %}
+                <div class="report-card">
+                    <div class="report-card-header">
+                        <span class="ticket-badge">{{ issue.ticket_number }}</span>
+                        <span class="issue-type">{{ issue.issue_type }}</span>
+                        <span class="submitted-time">🕐 {{ issue.created_at|date:"d M Y, H:i" }}</span>
+                    </div>
+                    <div class="report-card-body">
+                        <div class="report-photo">
+                            {% if issue.photo %}
+                                <a href="{{ issue.photo.url }}" target="_blank">
+                                    <img src="{{ issue.photo.url }}" alt="Issue photo">
+                                </a>
+                            {% else %}
+                                <span class="no-photo">📷<br>No photo submitted</span>
+                            {% endif %}
+                        </div>
+                        <div class="report-details">
+                            <div class="detail-row">
+                                <span class="detail-label">Description:</span>
+                                <span class="detail-value">{{ issue.description }}</span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Location:</span>
+                                <span class="detail-value">
+                                    {% if issue.address %}{{ issue.address }}<br>{% endif %}
+                                    {% if issue.latitude and issue.longitude %}
+                                        <a href="https://www.openstreetmap.org/?mlat={{ issue.latitude }}&mlon={{ issue.longitude }}&zoom=16" target="_blank">📍 View on Map</a>
+                                    {% endif %}
+                                    {% if not issue.address and not issue.latitude %}
+                                        <span style="color:#aaa; font-style:italic;">Not provided</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                            <div class="detail-row">
+                                <span class="detail-label">Status:</span>
+                                <span class="detail-value">
+                                    {% if issue.status == "In Progress" %}
+                                        <span class="status-badge status-InProgress">In Progress</span>
+                                    {% elif issue.status == "Resolved" %}
+                                        <span class="status-badge status-Resolved">Resolved</span>
+                                    {% else %}
+                                        <span class="status-badge status-Pending">Pending</span>
+                                    {% endif %}
+                                </span>
+                            </div>
+                            {% if issue.resolution_notes %}
+                            <div class="detail-row">
+                                <span class="detail-label">Resolution:</span>
+                                <span class="detail-value">{{ issue.resolution_notes }}</span>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="card">
+                <p class="no-reports">No reports submitted yet.</p>
+            </div>
+        {% endif %}
+
+        <div class="track-actions">
+            <a href="/report/" class="btn-primary" style="width: auto; padding: 11px 28px;">+ Report New Issue</a>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+</body>
+</html>
+

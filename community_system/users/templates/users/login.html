@@ -1,0 +1,226 @@
+
+
+<!-- 
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/login/" class="nav-login-btn">Login</a>
+    </div>
+</nav>
+
+<main class="main-content">
+   <div class="container">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <span class="auth-icon">&#9632;</span>
+                <h2>Welcome Back</h2>
+                <p>Sign in to access the municipality portal</p>
+            </div>
+
+            <form method="post" action="/login/">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" id="id_username" name="username" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input type="password" id="id_password" name="password" required>
+                </div>
+                <button type="submit" class="btn-primary">Sign In</button>
+            </form>
+
+       <div class="container">
+                <p>Don't have an account? <a href="/register/">Register here</a></p>
+            </div>
+        </div>
+    </div>
+</main>
+
+  <div class="container">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+</body>
+</html> -->
+
+
+
+<!-- WORKING VERSION: -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .role-selector {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .role-btn {
+            flex: 1;
+            padding: 12px 10px;
+            border: 2px solid #e0e4ed;
+            border-radius: 8px;
+            background: #f5f6fa;
+            color: #5a6478;
+            font-family: 'DM Sans', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.2s;
+            width: auto;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .role-btn .role-icon { font-size: 22px; }
+
+        .role-btn:hover {
+            border-color: #003366;
+            color: #003366;
+            background: #eef2f8;
+        }
+
+        .role-btn.active {
+            border-color: #003366;
+            background: #003366;
+            color: #FFD700;
+        }
+
+        .role-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/login/" class="nav-login-btn">Login</a>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="auth-page">
+        <div class="auth-card">
+
+            <div class="auth-card-header">
+                <span class="auth-icon">&#9632;</span>
+                <h2>Welcome Back</h2>
+                <p>Sign in to access the municipality portal</p>
+            </div>
+
+            <!-- Role Selector -->
+            <div class="role-selector">
+                <button type="button" class="role-btn active" id="btn-resident" onclick="selectRole('resident')">
+                    <span class="role-icon">&#128100;</span>
+                    Resident
+                    <span class="role-label">Community Member</span>
+                </button>
+                <button type="button" class="role-btn" id="btn-staff" onclick="selectRole('staff')">
+                    <span class="role-icon">&#127963;</span>
+                    Municipal Staff
+                    <span class="role-label">Staff Member</span>
+                </button>
+            </div>
+
+            {% if error %}
+                <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+
+            <form method="post" action="/login/">
+                {% csrf_token %}
+                <input type="hidden" name="role" id="role-input" value="resident">
+
+                <div class="form-group">
+                    <label for="id_username">Username</label>
+                    <input type="text" id="id_username" name="username"
+                           value="{{ request.POST.username }}" required autofocus>
+                </div>
+                <div class="form-group">
+                    <label for="id_password">Password</label>
+                    <input type="password" id="id_password" name="password" required>
+                </div>
+
+                <button type="submit" id="submit-btn">Sign In as Resident</button>
+            </form>
+
+            <div class="auth-footer">
+                <p>Don't have an account? <a href="/register/">Register here</a></p>
+            </div>
+
+        </div>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+<script>
+function selectRole(role) {
+    document.getElementById('role-input').value = role;
+    var residentBtn = document.getElementById('btn-resident');
+    var staffBtn    = document.getElementById('btn-staff');
+    var submitBtn   = document.getElementById('submit-btn');
+
+    if (role === 'staff') {
+        staffBtn.classList.add('active');
+        residentBtn.classList.remove('active');
+        submitBtn.textContent = 'Sign In as Staff';
+    } else {
+        residentBtn.classList.add('active');
+        staffBtn.classList.remove('active');
+        submitBtn.textContent = 'Sign In as Resident';
+    }
+}
+</script>
+
+</body>
+</html>

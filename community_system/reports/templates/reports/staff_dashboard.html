@@ -1,0 +1,654 @@
+<!-- 
+<!DOCTYPE html>
+<html>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'reports/style.css' %}">
+<head>
+<h2>Municipal Staff Dashboard</h2>
+
+<table border="1">
+<tr>
+    <th>Issue</th>
+    <th>Description</th>
+    <th>Status</th>
+    <th>Update</th>
+</tr>
+
+{% for issue in issues %}
+<tr>
+    <td>{{ issue.title }}</td>
+    <td>{{ issue.description }}</td>
+    <td>{{ issue.status }}</td>
+
+    <td>
+        <form method="post">
+            {% csrf_token %}
+            <select name="status">
+                <option>Open</option>
+                <option>In Progress</option>
+                <option>Resolved</option>
+            </select>
+
+            <button type="submit">Update</button>
+            <a href="/accounts/logout/">Logout</a>
+        </form>
+    </td>
+</tr>
+{% endfor %}
+
+</table>
+
+</body>
+</html> -->
+
+<!-- {% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="/static/reports/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .stats-row { display: flex; gap: 16px; margin-bottom: 28px; flex-wrap: wrap; }
+        .stat-card { flex: 1; min-width: 120px; background: #fff; border: 1px solid #e0e4ed; border-radius: 10px; padding: 18px 20px; text-align: center; }
+        .stat-num { font-size: 28px; font-weight: 600; color: #003366; font-family: 'Playfair Display', serif; }
+        .stat-label { font-size: 12px; color: #5a6478; margin-top: 4px; }
+        .issues-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .issues-table th { background: #003366; color: #fff; padding: 12px 16px; text-align: left; font-weight: 500; font-size: 13px; }
+        .issues-table td { padding: 12px 16px; border-bottom: 1px solid #e0e4ed; vertical-align: middle; }
+        .issues-table tr:last-child td { border-bottom: none; }
+        .issues-table tr:hover td { background: #f5f6fa; }
+        .status-badge { display: inline-block; padding: 3px 12px; border-radius: 20px; font-size: 12px; font-weight: 500; }
+        .badge-pending    { background: #fff3cd; color: #856404; }
+        .badge-progress   { background: #cce5ff; color: #004085; }
+        .badge-resolved   { background: #d4edda; color: #155724; }
+        .update-form { display: flex; align-items: center; gap: 8px; }
+        .update-form select { width: auto; margin: 0; padding: 6px 10px; font-size: 13px; }
+        .update-form button { width: auto; padding: 6px 14px; font-size: 13px; margin: 0; }
+        .photo-thumb { width: 48px; height: 48px; object-fit: cover; border-radius: 6px; border: 1px solid #e0e4ed; }
+        .no-issues { text-align: center; color: #999; padding: 48px; font-style: italic; }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+   <div class="header">
+        <img src="/static/reports/Dipaleseng.jpg" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="container">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/staff/">Staff Dashboard</a>
+        <form action="/accounts/logout/" method="post" class="logout-form">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="page-container">
+        <div class="page-title">
+            <h2>Staff Dashboard</h2>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num">{{ issues|length }}</div>
+                <div class="stat-label">Total Issues</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#856404;">{{ pending_count }}</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#004085;">{{ progress_count }}</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#155724;">{{ resolved_count }}</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+        </div>
+
+        <div class="card" style="padding:0; overflow:hidden;">
+            <table class="issues-table">
+                <thead>
+                    <tr>
+                        <th>Photo</th>
+                        <th>Issue Type</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Update</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Django will loop through issues here -->
+                    {{ issue_rows_html }}
+                <!-- </tbody>
+            </table>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+</body> -->
+<!-- </html> --> -->
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Staff Dashboard – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        /* ── Stats Row ── */
+        .stats-row {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            flex: 1;
+            min-width: 120px;
+            background: #fff;
+            border: 1px solid #e0e4ed;
+            border-radius: 10px;
+            padding: 18px 20px;
+            text-align: center;
+            border-top: 3px solid var(--gold);
+        }
+        .stat-num {
+            font-size: 28px;
+            font-weight: 600;
+            color: #003366;
+            font-family: 'Playfair Display', serif;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #5a6478;
+            margin-top: 4px;
+        }
+
+        /* ── Issue Cards ── */
+        .issue-card {
+            background: #fff;
+            border: 1px solid #e0e4ed;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .issue-card-header {
+            background: var(--navy);
+            color: #fff;
+            padding: 12px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            border-bottom: 2px solid var(--gold);
+        }
+        .issue-card-header .issue-meta {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .issue-type-label {
+            font-weight: 700;
+            font-size: 15px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .issue-date {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        .issue-id {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+
+        /* Priority badges */
+        .priority-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .priority-High   { background: #f8d7da; color: #721c24; }
+        .priority-Medium { background: #fff3cd; color: #856404; }
+        .priority-Low    { background: #d4edda; color: #155724; }
+
+        /* Status badges */
+        .status-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        .badge-pending  { background: #fff3cd; color: #856404; }
+        .badge-progress { background: #cce5ff; color: #004085; }
+        .badge-resolved { background: #d4edda; color: #155724; }
+
+        /* ── Issue Body ── */
+        .issue-card-body {
+            display: flex;
+            gap: 0;
+        }
+        .issue-photo {
+            width: 160px;
+            min-height: 150px;
+            flex-shrink: 0;
+            background: #f0f0f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .issue-photo img {
+            width: 160px;
+            height: 100%;
+            min-height: 150px;
+            object-fit: cover;
+            display: block;
+        }
+        .issue-photo .no-photo {
+            color: #bbb;
+            font-size: 12px;
+            text-align: center;
+            padding: 10px;
+        }
+        .issue-details {
+            flex: 1;
+            padding: 16px 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .detail-row {
+            display: flex;
+            gap: 8px;
+            font-size: 14px;
+            align-items: flex-start;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #555;
+            min-width: 100px;
+            flex-shrink: 0;
+        }
+        .detail-value { color: #222; }
+        .detail-value a { color: var(--navy); }
+        .detail-value a:hover { text-decoration: underline; }
+
+        /* ── Resolution info box ── */
+        .resolution-box {
+            background: #f0f7ff;
+            border: 1px solid #b3d4ff;
+            border-radius: 8px;
+            padding: 12px 16px;
+            margin-top: 6px;
+            font-size: 13px;
+            color: #1a3a5c;
+        }
+        .resolution-box strong {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--navy);
+        }
+
+        /* ── Update Form ── */
+        .issue-card-footer {
+            background: #f8f9fc;
+            border-top: 1px solid #e0e4ed;
+            padding: 16px 20px;
+        }
+        .update-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: flex-end;
+        }
+        .update-form .form-field {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+        .update-form .form-field label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #5a6478;
+            margin: 0;
+        }
+        .update-form select,
+        .update-form textarea,
+        .update-form input[type="text"] {
+            width: auto;
+            margin: 0;
+            padding: 7px 10px;
+            font-size: 13px;
+            border: 1px solid #e0e4ed;
+            border-radius: 6px;
+            background: #fff;
+        }
+        .update-form textarea {
+            width: 320px;
+            min-height: 60px;
+            resize: vertical;
+        }
+        .update-form button[type="submit"] {
+            width: auto;
+            padding: 8px 20px;
+            font-size: 13px;
+            margin: 0;
+            align-self: flex-end;
+        }
+
+        /* ── Feedback alert ── */
+        .feedback-alert {
+            display: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 10px;
+        }
+        .feedback-alert.show { display: block; }
+        .feedback-success { background: #d4edda; color: #155724; border-left: 4px solid #28a745; }
+        .feedback-error   { background: #f8d7da; color: #721c24; border-left: 4px solid #dc3545; }
+
+        .no-issues {
+            text-align: center;
+            color: #999;
+            padding: 48px;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .issue-card-body { flex-direction: column; }
+            .issue-photo { width: 100%; min-height: 180px; }
+            .issue-photo img { width: 100%; height: 180px; }
+            .update-form textarea { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/staff/">Staff Dashboard</a>
+        <form action="/accounts/logout/" method="post" class="logout-form">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="page-container">
+        <div class="page-title">
+            <h2>Staff Dashboard</h2>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-num">{{ issues|length }}</div>
+                <div class="stat-label">Total Issues</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#856404;">{{ pending_count }}</div>
+                <div class="stat-label">Pending</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#004085;">{{ progress_count }}</div>
+                <div class="stat-label">In Progress</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-num" style="color:#155724;">{{ resolved_count }}</div>
+                <div class="stat-label">Resolved</div>
+            </div>
+        </div>
+<th>Ticket</th>
+<td><span class="status-badge badge-pending">{{ issue.ticket_number }}</span></td>
+        <!-- Issue Cards -->
+        {% if issues %}
+            {% for issue in issues %}
+            <div class="issue-card">
+
+                <!-- Card Header -->
+                <div class="issue-card-header">
+                    <div class="issue-meta">
+                        <span class="issue-type-label">{{ issue.issue_type }}</span>
+                        <span class="issue-date">🕐 {{ issue.created_at|date:"d M Y, H:i" }}</span>
+                        <span class="issue-id">ID #{{ issue.id }}</span>
+                    </div>
+                    <div style="display:flex; gap:8px; align-items:center;">
+                        <!-- Priority Badge -->
+                        {% if issue.priority == "High" %}
+                            <span class="priority-badge priority-High">🔴 High</span>
+                        {% elif issue.priority == "Medium" %}
+                            <span class="priority-badge priority-Medium">🟡 Medium</span>
+                        {% else %}
+                            <span class="priority-badge priority-Low">🟢 Low</span>
+                        {% endif %}
+
+                        <!-- Status Badge -->
+                        {% if issue.status == "In Progress" %}
+                            <span class="status-badge badge-progress">In Progress</span>
+                        {% elif issue.status == "Resolved" %}
+                            <span class="status-badge badge-resolved">Resolved</span>
+                        {% else %}
+                            <span class="status-badge badge-pending">Pending</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Card Body -->
+                <div class="issue-card-body">
+
+                    <!-- Photo -->
+                    <div class="issue-photo">
+                        {% if issue.photo %}
+                            <a href="{{ issue.photo.url }}" target="_blank">
+                                <img src="{{ issue.photo.url }}" alt="Issue photo">
+                            </a>
+                        {% else %}
+                            <span class="no-photo">📷<br>No photo</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Details -->
+                    <div class="issue-details">
+
+                        <div class="detail-row">
+                            <span class="detail-label">Reported by:</span>
+                            <span class="detail-value">{{ issue.user.username }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Description:</span>
+                            <span class="detail-value">{{ issue.description }}</span>
+                        </div>
+
+                        <div class="detail-row">
+                            <span class="detail-label">Location:</span>
+                            <span class="detail-value">
+                                {% if issue.address %}
+                                    📍 {{ issue.address }}<br>
+                                {% endif %}
+                                {% if issue.latitude and issue.longitude %}
+                                    <a href="https://www.openstreetmap.org/?mlat={{ issue.latitude }}&mlon={{ issue.longitude }}&zoom=16" target="_blank">
+                                        View on Map ↗
+                                    </a>
+                                {% endif %}
+                                {% if not issue.address and not issue.latitude %}
+                                    <span style="color:#aaa; font-style:italic;">Not provided</span>
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        <!-- Resolution info if resolved -->
+                        {% if issue.resolution_notes %}
+                        <div class="detail-row">
+                            <span class="detail-label">Resolution:</span>
+                            <span class="detail-value">
+                                <div class="resolution-box">
+                                    <strong>Resolution Notes:</strong>
+                                    {{ issue.resolution_notes }}
+                                </div>
+                            </span>
+                        </div>
+                        {% endif %}
+
+                    </div>
+                </div>
+
+                <!-- Update Form -->
+                <div class="issue-card-footer">
+                    <form class="update-form" method="post" action="/staff/update/{{ issue.id }}/" onsubmit="handleUpdate(event, '{{ issue.id }}')">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                        <div class="form-field">
+                            <label>Priority</label>
+                            <select name="priority">
+                                <option value="Low"    {% if issue.priority == "Low"    %}selected{% endif %}>🟢 Low</option>
+                                <option value="Medium" {% if issue.priority == "Medium" %}selected{% endif %}>🟡 Medium</option>
+                                <option value="High"   {% if issue.priority == "High"   %}selected{% endif %}>🔴 High</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label>Status</label>
+                            <select name="status">
+                                <option value="Pending"     {% if issue.status == "Pending"     %}selected{% endif %}>Pending</option>
+                                <option value="In Progress" {% if issue.status == "In Progress" %}selected{% endif %}>In Progress</option>
+                                <option value="Resolved"    {% if issue.status == "Resolved"    %}selected{% endif %}>Resolved</option>
+                            </select>
+                        </div>
+
+                        <div class="form-field">
+                            <label>Resolution Notes</label>
+                            <textarea name="resolution_notes" placeholder="Describe what was done to resolve this issue...">{{ issue.resolution_notes }}</textarea>
+                        </div>
+
+                        <button type="submit" class="btn-primary">💾 Save Update</button>
+                    </form>
+
+                    <div id="feedback-{{ issue.id }}" class="feedback-alert"></div>
+                </div>
+
+            </div>
+            {% endfor %}
+
+        {% else %}
+            <div class="card">
+                <p class="no-issues">✅ No issues reported yet.</p>
+            </div>
+        {% endif %}
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+<script>
+function handleUpdate(event, issueId) {
+    event.preventDefault();
+    const form = event.target;
+    const feedback = document.getElementById('feedback-' + issueId);
+    const formData = new FormData(form);
+
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+    })
+    .then(response => response.json())
+    .then(data => {
+        feedback.className = 'feedback-alert show ' + (data.success ? 'feedback-success' : 'feedback-error');
+        feedback.textContent = data.success
+            ? '✅ Issue updated successfully! The resident has been notified.'
+            : '❌ Error: ' + (data.error || 'Something went wrong. Please try again.');
+
+        if (data.success) {
+            // Update the status badge in the header
+            const card = form.closest('.issue-card');
+            const statusBadge = card.querySelector('.status-badge');
+            const priorityBadge = card.querySelector('.priority-badge');
+            const newStatus = formData.get('status');
+            const newPriority = formData.get('priority');
+
+            // Update status badge
+            statusBadge.className = 'status-badge';
+            if (newStatus === 'In Progress') {
+                statusBadge.classList.add('badge-progress');
+            } else if (newStatus === 'Resolved') {
+                statusBadge.classList.add('badge-resolved');
+            } else {
+                statusBadge.classList.add('badge-pending');
+            }
+            statusBadge.textContent = newStatus;
+
+            // Update priority badge
+            priorityBadge.className = 'priority-badge priority-' + newPriority;
+            const icons = { High: '🔴', Medium: '🟡', Low: '🟢' };
+            priorityBadge.textContent = (icons[newPriority] || '') + ' ' + newPriority;
+        }
+
+        // Hide feedback after 4 seconds
+        setTimeout(() => {
+            feedback.className = 'feedback-alert';
+            feedback.textContent = '';
+        }, 4000);
+    })
+    .catch(() => {
+        feedback.className = 'feedback-alert show feedback-error';
+        feedback.textContent = '❌ Network error. Please check your connection and try again.';
+    });
+}
+</script>
+
+</body>
+</html>

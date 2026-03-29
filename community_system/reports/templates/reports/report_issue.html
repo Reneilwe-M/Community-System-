@@ -1,0 +1,497 @@
+<!-- <!DOCTYPE html>
+<html>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'reports/style.css' %}">
+<head>
+    <title>Report Issue</title>
+</head>
+<body>
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+
+<div class="container">
+    <h2>Report Issue</h2>
+
+    <form>
+        <label>Issue Type:</label>
+        <select>
+            <option>Water</option>
+            <option>Electricity</option>
+            <option>Pothole</option>
+            <option>Waste</option>
+        </select>
+
+        <label>Description:</label>
+        <textarea></textarea>
+
+        <label>Upload Photo:</label>
+        <input type="file">
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="/track/">View My Reports</a>
+</div>
+
+
+
+
+
+
+
+</body>
+</html> -->
+
+
+<!-- Working
+<!DOCTYPE html>
+<html>
+    {% load static %}
+<link rel="stylesheet" href="{% static 'reports/style.css' %}">
+<head>
+    <title>Report Issue</title>
+    <style>
+        .location-section {
+            margin-top: 8px;
+        }
+
+        .location-options {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+            flex-wrap: wrap;
+        }
+
+        .location-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: 1px solid #1565c0;
+            border-radius: 6px;
+            background: #1976d2;
+            color: #ffffff;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s;
+        }
+
+        .location-btn:hover {
+            background: #1565c0;
+            border-color: #0d47a1;
+        }
+
+        .location-btn svg {
+            flex-shrink: 0;
+        }
+
+        #location-status {
+            font-size: 13px;
+            color: #555;
+            margin-top: 6px;
+            min-height: 20px;
+        }
+
+        #location-status.success {
+            color: #2e7d32;
+        }
+
+        #location-status.error {
+            color: #c62828;
+        }
+
+        #location-status.loading {
+            color: #1565c0;
+        }
+
+        #manual-location-input {
+            display: none;
+            margin-top: 8px;
+        }
+
+        #manual-location-input input {
+            width: 100%;
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        #location-map-preview {
+            display: none;
+            margin-top: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #ddd;
+        }
+
+        #location-map-preview iframe {
+            width: 100%;
+            height: 180px;
+            border: none;
+          
+            display: block;
+        }
+          .page-container--narrow {
+            max-width: 800px;
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo">
+    <h1>Dipaleseng Local Municipality</h1>
+    <p>The Place of the Rising Sun</p>
+</div>
+<div class="navbar">
+ <div class="container">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/staff/">Staff Dashboard</a>
+
+        <form action="/accounts/logout/" method="post" class="logout-form">
+            {% csrf_token %}
+            <!-- <button type="submit" class="logout-btn">Logout</button> -->
+        <!-- </form>
+    </div>
+
+</div>
+
+<div class="container">
+    <h2>Report Issue</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <label>Issue Type:</label>
+        <select name="issue_type">
+            <option>Water</option>
+            <option>Electricity</option>
+            <option>Pothole</option>
+            <option>Waste</option>
+        </select>
+
+        <label>Description:</label>
+        <textarea name="description"></textarea>
+
+        <label>Upload Photo:</label>
+        <input type="file" name="photo" accept="image/*">
+
+        <label>Location:</label>
+        <div class="location-section">
+            <div class="location-options">
+                <button type="button" class="location-btn" onclick="detectLocation()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                        <circle cx="12" cy="12" r="8" stroke-dasharray="2 2"/>
+                    </svg>
+                    Use My Location
+                </button>
+                <button type="button" class="location-btn" onclick="toggleManualInput()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                    Enter Address
+                </button>
+            </div>
+
+            <div id="location-status"></div>
+
+            <div id="manual-location-input">
+                <input type="text" id="address-text" name="address" placeholder="e.g. 12 Main Street, Grootvlei, 2390" />
+            </div>
+
+            <div id="location-map-preview">
+                <iframe id="map-iframe" src="" allowfullscreen loading="lazy"></iframe>
+            </div>
+ 
+            <input type="hidden" id="latitude" name="latitude">
+            <input type="hidden" id="longitude" name="longitude">
+        </div>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <a href="/track/">View My Reports</a>
+    <a href="/accounts/logout/">Logout</a>
+</div> -->
+
+<!-- <script>
+    function detectLocation() {
+        const status = document.getElementById('location-status');
+        const manualInput = document.getElementById('manual-location-input');
+
+        manualInput.style.display = 'none';
+        status.className = 'loading';
+        status.textContent = 'Detecting your location…';
+
+        if (!navigator.geolocation) {
+            status.className = 'error';
+            status.textContent = 'Geolocation is not supported by your browser.';
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude.toFixed(6);
+                const lng = pos.coords.longitude.toFixed(6);
+
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+
+                status.className = 'success';
+                status.textContent = `📍 Location captured: ${lat}, ${lng}`;
+
+                // Show a map preview using OpenStreetMap
+                const mapPreview = document.getElementById('location-map-preview');
+                const mapIframe = document.getElementById('map-iframe');
+                mapIframe.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lng - 0.005},${lat - 0.005},${parseFloat(lng) + 0.005},${parseFloat(lat) + 0.005}&layer=mapnik&marker=${lat},${lng}`;
+                mapPreview.style.display = 'block';
+            },
+            (err) => {
+                status.className = 'error';
+                switch (err.code) {
+                    case err.PERMISSION_DENIED:
+                        status.textContent = 'Location access denied. Please enter your address manually.';
+                        break;
+                    case err.POSITION_UNAVAILABLE:
+                        status.textContent = 'Location unavailable. Please enter your address manually.';
+                        break;
+                    default:
+                        status.textContent = 'Unable to retrieve location. Please try again or enter manually.';
+                }
+                toggleManualInput(true);
+            }
+        );
+    }
+
+    function toggleManualInput(forceOpen = false) {
+        const manualInput = document.getElementById('manual-location-input');
+        const isHidden = manualInput.style.display === 'none' || manualInput.style.display === '';
+
+        if (isHidden || forceOpen) {
+            manualInput.style.display = 'block';
+            document.getElementById('address-text').focus();
+            if (!forceOpen) {
+                document.getElementById('location-status').textContent = '';
+                document.getElementById('location-map-preview').style.display = 'none';
+            }
+        } else {
+            manualInput.style.display = 'none';
+        }
+    }
+</script>
+</body>
+</html>  --> -->
+
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Report Issue – Dipaleseng Portal</title>
+    <link rel="stylesheet" href="{% static 'reports/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        .location-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+            padding: 9px 16px;
+            border: none;
+            border-radius: 6px;
+            background: #003366;
+            color: #fff;
+            cursor: pointer;
+            font-size: 14px;
+            font-family: 'DM Sans', sans-serif;
+            font-weight: 500;
+            transition: background 0.2s;
+            width: auto;
+            margin-top: 0;
+            margin-right: 8px;
+        }
+        .location-btn:hover { background: #001f40; }
+        .location-options { display: flex; gap: 10px; margin-top: 8px; flex-wrap: wrap; }
+        #location-status { font-size: 13px; color: #5a6478; margin-top: 6px; min-height: 20px; }
+        #location-status.success { color: #1a7a4a; }
+        #location-status.error   { color: #c0392b; }
+        #location-status.loading { color: #003366; }
+        #manual-location-input { display: none; margin-top: 8px; }
+        #location-map-preview { display: none; margin-top: 10px; border-radius: 8px; overflow: hidden; border: 1px solid #e0e4ed; }
+        #location-map-preview iframe { width: 100%; height: 180px; border: none; display: block; }
+    </style>
+</head>
+<body>
+
+<header class="site-header">
+    <div class="header-inner">
+        <img src="{% static 'reports/Dipaleseng.jpg' %}" alt="Logo" class="logo">
+        <div class="header-text">
+            <h1>Dipaleseng Local Municipality</h1>
+            <p>The Place of the Rising Sun</p>
+        </div>
+    </div>
+</header>
+
+<nav class="navbar">
+    <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/report/">Report Issue</a>
+        <a href="/track/">Track Issues</a>
+        <a href="/staff/">Staff Dashboard</a>
+        <form action="/accounts/logout/" method="post" class="logout-form">
+            <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+            <button type="submit" class="logout-btn">Logout</button>
+        </form>
+    </div>
+</nav>
+
+<main class="main-content">
+    <div class="page-container">
+        <div class="page-title">
+            <h2>Report an Issue</h2>
+        </div>
+{% if submitted_ticket %}
+<div class="alert alert-success" style="margin-top: 20px;">
+    Your issue has been submitted successfully!
+    <strong>Your ticket number is: {{ submitted_ticket }}</strong>
+    — use this to track your issue.
+</div>
+{% endif %}
+        <div class="card">
+            <form method="post" action="/report/" enctype="multipart/form-data">
+                <input type="hidden" name="csrfmiddlewaretoken" value="{{ csrf_token }}">
+
+                <div class="form-group">
+                    <label for="issue_type">Issue Type</label>
+                    <select id="issue_type" name="issue_type">
+                        <option value="Water">Water</option>
+                        <option value="Electricity">Electricity</option>
+                        <option value="Pothole">Pothole</option>
+                        <option value="Waste">Waste</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" name="description" rows="4" placeholder="Describe the issue in detail..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="photo">Upload Photo (optional)</label>
+                    <input type="file" id="photo" name="photo" accept="image/*">
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <div class="location-options">
+                        <button type="button" class="location-btn" onclick="detectLocation()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="3"/>
+                                <path d="M12 2v3M12 19v3M2 12h3M19 12h3"/>
+                            </svg>
+                            Use My Location
+                        </button>
+                        <button type="button" class="location-btn" onclick="toggleManualInput()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                            </svg>
+                            Enter Address
+                        </button>
+                    </div>
+                    <div id="location-status"></div>
+                    <div id="manual-location-input">
+                        <input type="text" id="address-text" name="address" placeholder="e.g. 12 Main Street, Grootvlei, 2390">
+                    </div>
+                    <div id="location-map-preview">
+                        <iframe id="map-iframe" src="" allowfullscreen loading="lazy"></iframe>
+                    </div>
+                    <input type="hidden" id="latitude" name="latitude">
+                    <input type="hidden" id="longitude" name="longitude">
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: auto; padding: 11px 32px;">Submit Report</button>
+            </form>
+
+            <div style="margin-top: 16px;">
+                <a href="/track/">View My Reports</a>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+<footer class="site-footer">
+    <p>&copy; 2025 Dipaleseng Local Municipality. All rights reserved.</p>
+</footer>
+
+<script>
+function detectLocation() {
+    const status = document.getElementById('location-status');
+    const manualInput = document.getElementById('manual-location-input');
+    manualInput.style.display = 'none';
+    status.className = 'loading';
+    status.textContent = 'Detecting your location...';
+    if (!navigator.geolocation) {
+        status.className = 'error';
+        status.textContent = 'Geolocation is not supported by your browser.';
+        return;
+    }
+    navigator.geolocation.getCurrentPosition(
+        function(pos) {
+            var lat = pos.coords.latitude.toFixed(6);
+            var lng = pos.coords.longitude.toFixed(6);
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+            status.className = 'success';
+            status.textContent = 'Location captured: ' + lat + ', ' + lng;
+            var mapPreview = document.getElementById('location-map-preview');
+            var mapIframe = document.getElementById('map-iframe');
+            mapIframe.src = 'https://www.openstreetmap.org/export/embed.html?bbox='
+                + (lng - 0.005) + ',' + (lat - 0.005) + ','
+                + (parseFloat(lng) + 0.005) + ',' + (parseFloat(lat) + 0.005)
+                + '&layer=mapnik&marker=' + lat + ',' + lng;
+            mapPreview.style.display = 'block';
+        },
+        function(err) {
+            status.className = 'error';
+            status.textContent = err.code === 1
+                ? 'Location access denied. Please enter your address manually.'
+                : 'Unable to retrieve location. Please try again or enter manually.';
+            toggleManualInput(true);
+        }
+    );
+}
+
+function toggleManualInput(forceOpen) {
+    var manualInput = document.getElementById('manual-location-input');
+    var isHidden = manualInput.style.display === 'none' || manualInput.style.display === '';
+    if (isHidden || forceOpen) {
+        manualInput.style.display = 'block';
+        document.getElementById('address-text').focus();
+        if (!forceOpen) {
+            document.getElementById('location-status').textContent = '';
+            document.getElementById('location-map-preview').style.display = 'none';
+        }
+    } else {
+        manualInput.style.display = 'none';
+    }
+}
+</script>
+
+</body>
+</html>
+
+
+ 
